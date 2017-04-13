@@ -1,32 +1,40 @@
 var express = require('express')
 var app = express()
 var request = require('request')
+var path = require('path');
+
 
 function getTestPersonaLoginCredentials(callback) {
-  request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=FF28&td=8D4B&c=00FFDF')
+//  request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=FF28&td=8D4B&c=00FFDF')
 }
 
-function sendSlackMessage(){
+function sendSlackMessage(message){
     request({
         url: 'https://hooks.slack.com/services/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',
-        form: '{"text": "NU MOET HET LICHTJE BRANDEN"}',
+        form: '{"text": "'+message+'"}',
         method: 'POST',
         type: 'application/json',
     }, function (error, response, data) {
         if (error) {
             console.log(error);
         } else {
-            console.log(data);
             return data;
-            //res.send(data);
         }
     });
 }
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-  getTestPersonaLoginCredentials()
-  sendSlackMessage();
-  res.send("send Post")
+  getTestPersonaLoginCredentials();
+  res.sendFile(path.join(__dirname + '/public/form.html'));
+})
+
+
+app.get('/message', function (req, res) {
+  var message = req.query.text;
+  var importance = req.query.importance;
+  sendSlackMessage(message);
+  getTestPersonaLoginCredentials();
 })
 
 app.listen(3000, function () {
