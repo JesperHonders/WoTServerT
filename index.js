@@ -26,7 +26,6 @@ function sendSlackMessage(message){
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-  getTestPersonaLoginCredentials();
   res.sendFile(path.join(__dirname + '/public/form.html'));
 })
 
@@ -34,9 +33,10 @@ app.get('/', function (req, res) {
 app.get('/message', function (req, res) {
   var message = req.query.text;
   var importance = req.query.importance;
-  sendSlackMessage(message);
+  console.log(req.query);
+  //sendSlackMessage(message);
   getTestPersonaLoginCredentials();
-})
+});
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')

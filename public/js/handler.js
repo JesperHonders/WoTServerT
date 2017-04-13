@@ -17,7 +17,8 @@ var handler = {
 
             var message = document.querySelector('input[type*="text"]').value;
             var importance = document.querySelector('input[name="color"]:checked').value;
-            request.open("GET", "/message?text=" + message + "&importance=" + importance, true);
+            console.log(importance);
+            request.open("GET", "/message?text=" + message + "&color=" + importance, true);
             request.send();
         });
     },
