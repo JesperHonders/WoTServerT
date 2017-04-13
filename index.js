@@ -3,6 +3,7 @@ var app = express()
 var request = require('request')
 var path = require('path');
 
+var slackURL = 'https://hooks.slack.com/services/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';
 
 function getTestPersonaLoginCredentials(callback) {
 //  request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=FF28&td=8D4B&c=00FFDF')
@@ -10,7 +11,7 @@ function getTestPersonaLoginCredentials(callback) {
 
 function sendSlackMessage(message){
     request({
-        url: 'https://hooks.slack.com/services/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',
+        url: slackURL,
         form: '{"text": "'+message+'"}',
         method: 'POST',
         type: 'application/json',
