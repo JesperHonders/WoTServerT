@@ -26,5 +26,5 @@ De interface
 |   |--README.md
 ```
 
-In handler.js word een http request aangemaakt die de url message (bericht) en de importance (kleur lampjes) meekrijgt. 
-Vervolgens word in index.js een request gemaakt naar /message daar worden het bericht en importance als variable opgeslagen en uitgestuurd naar de server van slack en de server van de arduino. 
+In handler.js word een http request aangemaakt die de url message (bericht) en de importance (kleur lampjes) meestuurd naar de backend (/message). 
+Vervolgens word in index.js een de request naar /message afgehandelt en worden het bericht en importance als variable opgeslagen en uitgestuurd naar de server van slack en de server van de arduino in beide weer een HTTP request. 
