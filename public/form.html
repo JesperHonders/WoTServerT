@@ -1,39 +1,36 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
-        <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style/style.css">
+        <title>TODO supply a title</title>
+
         <script src="js/handler.js"></script>
         <script src="js/app.js"></script>
-
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div>
+        <section class="message-page"> 
             <form>
-                <div>
-                    <h3>Importance</h3>
-                    <label>Red</label>
-                    <input type="radio" name="color" value="FF0000"/>
-                    <label>Orange</label>
-                    <input type="radio" name="color" value="FF7F50"/>
-                    <label>Green</label>
-                    <input type="radio" name="color" value="008000" checked/>
-                </div>
-                <div>
-                    <h3>Text</h3>
-                    <input type="text"/>
-                </div>
-                <div>
-                    <label>Send</label>
+                <section class="select_color">
+                    <h1>Importance of massage</h1>
+                    <label for="red">Red</label>
+                    <input type="radio" id="red" name="color" value="FF0000"/>
+                    <label for="orange">Orange</label>
+                    <input type="radio" id="orange" name="color" value="FF7F50"/>
+                    <label for="green">Green</label>
+                    <input type="radio" id="green" name="color" value="008000" checked/>
+                </section>
+                <section class="message">
+                    <label for="message">Message</label>
+<!--                    <textarea id="message" name="message" required></textarea>-->
+                    <input type="text" name="message" value="message" required />
+                </section>
+                <section class="button">
                     <input type="submit"/>
-                </div>
+                </section>
             </form>
-        </div>
+        </section>
     </body>
 </html>
