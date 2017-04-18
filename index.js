@@ -34,20 +34,28 @@ function setLEDColor(importance) {
     });
 }
 
-function getNewsArticles(){
-    request(' https://newsapi.org/v1/articles?source=the-next-web&sortBy=latest&apiKey=' + newsApiKey, function(error, response, data){
-       var parsedData = JSON.parse(data);
-       //var author = parsedData.source;
-       var articles = parsedData.articles;
-       
-       for(var i = 0; i < 1; i++){
-           var message = articles[i].title + ' ' + articles[i].url;
-           sendSlackMessage(message, newsSlackURL);
-       }
+function getNewsArticles(source, sort) {
+    request(' https://newsapi.org/v1/articles?source=' + source + '&sortBy='+ sort +'&apiKey=' + newsApiKey, function (error, response, data) {
+        var parsedData = JSON.parse(data);
+        //var author = parsedData.source;
+        var articles = parsedData.articles;
+        console.log(articles);
+        if (articles != undefined) {
+            for (var i = 0; i < 3; i++) {
+                var message = articles[i].title + ' ' + articles[i].url;
+                sendSlackMessage(message, newsSlackURL);
+            }
+        }
     });
 }
+    
+//google-news - top
+//bbc-news  - top
+//the-next-web - latest
+//techradar - latest
 
-//getNewsArticles();
+
+//getNewsArticles('google-news', 'top');
 
 
 function sendSlackMessage(message, url) {
@@ -74,8 +82,13 @@ app.get('/', function (req, res) {
 app.get('/message', function (req, res) {
     var message = req.query.text;
     var importance = req.query.importance;
-
-    sendSlackMessage(message, generalSlackURL);
+    var newsMedium = req.query.medium;
+    
+    if(newsMedium == 'no-medium'){
+            sendSlackMessage(message, generalSlackURL);
+    }else{
+        getNewsArticles(newsMedium, 'top');
+    }
     setLEDColor(importance);
 });
 
