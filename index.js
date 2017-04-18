@@ -4,12 +4,20 @@ var request = require('request')
 var path = require('path');
 
 var slackURL = 'https://hooks.slack.com/services/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';
+var chipIDs = ['AF3E', '8d4b', 'FF28'];
 
-function getTestPersonaLoginCredentials(importance) {
- request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sdc&d=AF3E&td=AF3E&c=' + importance, function(){
-    request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=AF3E');
-    //request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=rdc&d=AF3E&td=AF3E');
-  });
+function setLEDColor(importance) {
+  for(var i = 0; i < chipIDs.length; i++){
+      request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sdc&d='+chipIDs[i]+'&td='+chipIDs[i]+'&c=' + importance, function(){
+        //remove old messages
+        request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=rdc&d='+chipIDs[i]+'&td='+chipIDs[i]+'');
+        
+        //create new message
+        request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d='+chipIDs[i]);
+    }); 
+  }  
+    
+
    request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sdc&d=8d4b&td=8d4b&c=' + importance, function(){
     request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=8d4b');
     //request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=rdc&d=8d4b&td=8d4b');
@@ -46,7 +54,7 @@ app.get('/message', function (req, res) {
   var importance = req.query.importance;
   
   sendSlackMessage(message);
-  getTestPersonaLoginCredentials(importance);
+  setLEDColor(importance);
 });
 
 app.listen(3000, function () {
