@@ -5,12 +5,8 @@ var handler = {
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () {
                 if (request.readyState == XMLHttpRequest.DONE) {
-                    if (request.status == 200) {
+                    if (request.status == 4) {
                         console.log('result')
-                    } else if (request.status == 400) {
-                        console.log('There was an error 400');
-                    } else {
-                        console.log('something else other than 200 was returned');
                     }
                 }
             };
