@@ -57,6 +57,59 @@ function getNewsArticles(source, sort) {
 
 //getNewsArticles('google-news', 'top');
 
+var sensorValue;
+function getSensorValues() {
+
+    request({
+        url: 'https://api.thingspeak.com/channels/260065/fields/1.json?results=1',
+        method: 'GET',
+        async: false,
+    }, function (error, response, data) {
+        if (error) {
+            console.log(error);
+        } else {
+            var parsedData = JSON.parse(data);
+
+            var data = {
+                value: parsedData.feeds[0].field1,
+                created_at: parsedData.feeds[0].created_at
+            }
+            
+            sensorValue = data;
+        }
+    });
+   
+}
+
+
+var lastSensorValue;
+setInterval(function(){
+    getSensorValues();
+    var curDate = new Date().getDate();
+    var data = sensorValue;
+        
+    console.log(data);  
+    if(data != undefined){
+        
+        if (lastSensorValue != data.value) {
+            lastSensorValue = data.value;
+            console.log('IT CHANGED');
+            if (data.value > 0 && data.value < 25) {
+                console.log('UNDER 25');
+                getNewsArticles('google-news', 'top');
+            } else if (data.value > 25 && data.value < 50) {
+                console.log('ABOVE 25');
+                getNewsArticles('bbc-news', 'top');
+            } else if (data.value > 50 && data.value < 75) {
+                console.log('ABOVE 50');
+                getNewsArticles('the-next-web', 'latest');
+            } else if (data.value > 75 && data.value < 100) {
+                console.log('ABOVE 75');
+                getNewsArticles('techradar', 'latest');
+            }
+        }
+    }
+}, 5000);
 
 function sendSlackMessage(message, url) {
     request({
