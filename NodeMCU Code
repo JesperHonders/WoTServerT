@@ -104,6 +104,8 @@ void writeThingSpeak(int distance) {
     String postStr = "6JA2Z3SRXG1R795Q";
     postStr += "&field1=";                   // Post de analogeWaarde naar field 1 van je ThingSpeak channel
     postStr += String(distance);
+    postStr += "&field2=";
+    postStr += String(chipID);
 
     postStr += "\r\n\r\n";
 
