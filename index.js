@@ -3,6 +3,7 @@ var app = express()
 var request = require('request')
 var path = require('path');
 
+var heleenSlackURL = 'https://hooks.slack.com/services/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';
 var generalSlackURL = 'https://hooks.slack.com/services/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';
 var newsSlackURL = 'https://hooks.slack.com/services/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';
 var newsApiKey = '9e5dce43547a4fe0a8b0b875111ff3c2'; 
@@ -10,38 +11,25 @@ var chipIDs = ['AF3E', '8d4b', 'FF28'];
 
 function setLEDColor(importance) {
     request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sdc&d=' + chipIDs[0] + '&td=' + chipIDs[0] + '&c=' + importance, function () {
-        //remove old messages
-        //request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=rdc&d=' + chipIDs[0] + '&td=' + chipIDs[0]);
-
-        //create new message
         request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=' + chipIDs[0]);
     });
     
     request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sdc&d=' + chipIDs[1] + '&td=' + chipIDs[1] + '&c=' + importance, function () {
-        //remove old messages
-        //request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=rdc&d=' + chipIDs[1] + '&td=' + chipIDs[1]);
-
-        //create new message
         request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=' + chipIDs[1]);
     });
 
     request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sdc&d=' + chipIDs[2] + '&td=' + chipIDs[2] + '&c=' + importance, function () {
-        //remove old messages
-        //request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=rdc&d=' + chipIDs[2] + '&td=' + chipIDs[2]);
-
-        //create new message
         request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=' + chipIDs[2]);
     });
 }
 
-function getNewsArticles(source, sort) {
+function getNewsArticles(source, sort, amount) {
     request(' https://newsapi.org/v1/articles?source=' + source + '&sortBy='+ sort +'&apiKey=' + newsApiKey, function (error, response, data) {
         var parsedData = JSON.parse(data);
-        //var author = parsedData.source;
         var articles = parsedData.articles;
         console.log(articles);
         if (articles != undefined) {
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < amount; i++) {
                 var message = articles[i].title + ' ' + articles[i].url;
                 sendSlackMessage(message, newsSlackURL);
             }
@@ -53,9 +41,6 @@ function getNewsArticles(source, sort) {
 //bbc-news  - top
 //the-next-web - latest
 //techradar - latest
-
-
-//getNewsArticles('google-news', 'top');
 
 var sensorValue;
 function getSensorValues() {
@@ -85,27 +70,24 @@ function getSensorValues() {
 var lastSensorValue = 0;
 setInterval(function(){
     getSensorValues();
-    var curDate = new Date().getDate();
     var data = sensorValue;
-        
-    console.log(data);  
+     
+    console.log(data);
     if(data != undefined){
         
-        if (lastSensorValue != data.value && lastSensorValue > 0) {
+        if (lastSensorValue != data.value) {
             lastSensorValue = data.value;
             console.log('IT CHANGED');
-            if (data.value > 0 && data.value < 25) {
-                console.log('UNDER 25');
-                getNewsArticles('google-news', 'top');
-            } else if (data.value > 25 && data.value < 50) {
-                console.log('ABOVE 25');
-                getNewsArticles('bbc-news', 'top');
-            } else if (data.value > 50 && data.value < 75) {
-                console.log('ABOVE 50');
-                getNewsArticles('the-next-web', 'latest');
-            } else if (data.value > 75 && data.value < 100) {
-                console.log('ABOVE 75');
-                getNewsArticles('techradar', 'latest');
+            if (data.value > 0 && data.value < 21) {
+                getNewsArticles('the-next-web', 'latest', 1);
+            } else if (data.value > 20 && data.value < 41) {
+                getNewsArticles('the-next-web', 'latest', 2);
+            } else if (data.value > 40 && data.value < 61) {
+                getNewsArticles('the-next-web', 'latest', 3);
+            } else if (data.value > 60 && data.value < 81) {
+                getNewsArticles('the-next-web', 'latest', 4);
+            } else if (data.value > 80 && data.value < 101) {
+                getNewsArticles('the-next-web', 'latest', 5);
             }
         }
     }
