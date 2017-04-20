@@ -27,7 +27,6 @@ function getNewsArticles(source, sort, amount) {
     request(' https://newsapi.org/v1/articles?source=' + source + '&sortBy='+ sort +'&apiKey=' + newsApiKey, function (error, response, data) {
         var parsedData = JSON.parse(data);
         var articles = parsedData.articles;
-        console.log(articles);
         if (articles != undefined) {
             for (var i = 0; i < amount; i++) {
                 var message = articles[i].title + ' ' + articles[i].url;
