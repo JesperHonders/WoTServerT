@@ -82,7 +82,7 @@ function getSensorValues() {
 }
 
 
-var lastSensorValue;
+var lastSensorValue = 0;
 setInterval(function(){
     getSensorValues();
     var curDate = new Date().getDate();
@@ -91,7 +91,7 @@ setInterval(function(){
     console.log(data);  
     if(data != undefined){
         
-        if (lastSensorValue != data.value) {
+        if (lastSensorValue != data.value && lastSensorValue > 0) {
             lastSensorValue = data.value;
             console.log('IT CHANGED');
             if (data.value > 0 && data.value < 25) {
