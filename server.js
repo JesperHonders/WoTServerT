@@ -50,67 +50,6 @@ function getNewsArticles(source, sort, amount, id) {
     });
 }
 
-//google-news - top
-//bbc-news  - top
-//the-next-web - latest
-//techradar - latest
-
-var sensorValue;
-function getSensorValues() {
-
-    request({
-        url: 'https://api.thingspeak.com/channels/260065/fields/1.json?results=1',
-        method: 'GET',
-        async: false,
-    }, function (error, response, data) {
-        if (error) {
-            console.log(error);
-        } else {
-            var parsedData = JSON.parse(data);
-
-            var data = {
-                value: parsedData.feeds[0].field1,
-                id: parsedData.feeds[0].field2
-            }
-
-            sensorValue = data;
-        }
-    });
-
-}
-
-
-var lastSensorValue = 0;
-var checkSensorValue;
-function startSensorValueCheck() {
-    checkSensorValue = setInterval(function () {
-        getSensorValues();
-        var data = sensorValue;
-
-        console.log(data);
-        if (data != undefined) {
-
-            if (lastSensorValue != data.value) {
-                lastSensorValue = data.value;
-                console.log('IT CHANGED');
-                if (data.value > 0 && data.value < 21) {
-                    getNewsArticles('the-next-web', 'latest', 1, data.id);
-                } else if (data.value > 20 && data.value < 41) {
-                    getNewsArticles('the-next-web', 'latest', 2, data.id);
-                } else if (data.value > 40 && data.value < 61) {
-                    getNewsArticles('the-next-web', 'latest', 3, data.id);
-                } else if (data.value > 60 && data.value < 81) {
-                    getNewsArticles('the-next-web', 'latest', 4, data.id);
-                } else if (data.value > 80 && data.value < 101) {
-                    getNewsArticles('the-next-web', 'latest', 5, data.id);
-                }
-            }
-        }
-    }, 2000);
-}
-
-startSensorValueCheck();
-
 function sendSlackMessage(message, url) {
     request({
         url: url,
@@ -142,6 +81,20 @@ app.get('/pushdata/:distance/:chipId', function (req, res){
       }
 
       var json = JSON.parse(data)
+      
+//      console.log(json[0]);
+//        if (data.value > 0 && data.value < 21) {
+//            getNewsArticles('the-next-web', 'latest', 1, data.id);
+//        } else if (data.value > 20 && data.value < 41) {
+//            getNewsArticles('the-next-web', 'latest', 2, data.id);
+//        } else if (data.value > 40 && data.value < 61) {
+//            getNewsArticles('the-next-web', 'latest', 3, data.id);
+//        } else if (data.value > 60 && data.value < 81) {
+//            getNewsArticles('the-next-web', 'latest', 4, data.id);
+//        } else if (data.value > 80 && data.value < 101) {
+//            getNewsArticles('the-next-web', 'latest', 5, data.id);
+//        }
+      
       
       json.push({distance: distance, chipId : chipId })
 
