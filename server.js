@@ -2,6 +2,7 @@ var express = require('express')
 var app = express()
 var request = require('request')
 var path = require('path');
+var fs = require('fs');
 
 //PERSONAL SLACK URLS
 var heleenSlackURL = 'https://hooks.slack.com/services/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';
