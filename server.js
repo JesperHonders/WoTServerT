@@ -73,33 +73,20 @@ app.get('/', function (req, res) {
 app.get('/pushdata/:distance/:chipId', function (req, res){
   var distance = req.params.distance;
   var chipId = req.params.chipId;
-  
   res.send('Hello');
   fs.readFile('./sensordata.json', function (err, data) {
       if(err) {
         console.log(err);
       }
 
-      var json = JSON.parse(data)
-      
-//      console.log(json[0]);
-//        if (data.value > 0 && data.value < 21) {
-//            getNewsArticles('the-next-web', 'latest', 1, data.id);
-//        } else if (data.value > 20 && data.value < 41) {
-//            getNewsArticles('the-next-web', 'latest', 2, data.id);
-//        } else if (data.value > 40 && data.value < 61) {
-//            getNewsArticles('the-next-web', 'latest', 3, data.id);
-//        } else if (data.value > 60 && data.value < 81) {
-//            getNewsArticles('the-next-web', 'latest', 4, data.id);
-//        } else if (data.value > 80 && data.value < 101) {
-//            getNewsArticles('the-next-web', 'latest', 5, data.id);
-//        }
-      
-      
-      json.push({distance: distance, chipId : chipId })
+      var dataToSend = JSON.parse(data)
 
-      fs.writeFile("./sensordata.json", JSON.stringify(json))
+      dataToSend.push({distance: distance, chipId : chipId, time: new Date().getTime()})
+      checkArticle(dataToSend);
+      fs.writeFile("./sensordata.json", JSON.stringify(dataToSend))
   })
+
+
 })
 
 app.get('/message', function (req, res) {
@@ -110,10 +97,32 @@ app.get('/message', function (req, res) {
     setLEDColor(importance);
 });
 
-app.listen(80, function () {
+app.listen(3000, function () {
     console.log('Example app listening on port 3000!')
 })
 
+function checkArticle(data) {
+  console.log(data, typeof data, data.length);
+
+  var jsonLength = data.length;
+  var minDifference = data[jsonLength - 2].time + 5000;
+  var lastValue = data[jsonLength - 1].distance;
+  var lastChipID = data[jsonLength - 1].chipId;
+  // console.log(json.length);
+  if (data[jsonLength - 1].time > minDifference){
+          if (lastValue > 0 && lastValue < 21) {
+              getNewsArticles('the-next-web', 'latest', 1, lastChipID);
+          } else if (lastValue > 20 && lastValue < 41) {
+              getNewsArticles('the-next-web', 'latest', 2, lastChipID);
+          } else if (lastValue > 40 && lastValue < 61) {
+              getNewsArticles('the-next-web', 'latest', 3, lastChipID);
+          } else if (lastValue > 60 && lastValue < 81) {
+              getNewsArticles('the-next-web', 'latest', 4, lastChipID);
+          } else if (lastValue > 80 && lastValue < 101) {
+              getNewsArticles('the-next-web', 'latest', 5, lastChipID);
+          }
+  }
+}
 
 
 
