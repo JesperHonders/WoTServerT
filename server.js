@@ -13,7 +13,7 @@ var generalSlackURL = 'https://hooks.slack.com/services/T4ZCSTHTQ/B4ZD95YAK/fIkZ
 var newsSlackURL = 'https://hooks.slack.com/services/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';
 var triviaSlackURL = 'https://hooks.slack.com/services/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';
 var newsApiKey = '9e5dce43547a4fe0a8b0b875111ff3c2';
-var chipIDs = ['AF3E', '8d4b', 'FF28'];
+var chipIDs = ['AF3E', '8D4B', 'FF28'];
 
 function setLEDColor(importance) {
     request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sdc&d=' + chipIDs[0] + '&td=' + chipIDs[0] + '&c=' + importance, function () {
