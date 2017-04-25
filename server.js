@@ -36,9 +36,9 @@ function getNewsArticles(source, sort, amount, id) {
             for (var i = 0; i < amount; i++) {
                 var message = articles[i].title + ' ' + articles[i].url;
 
-                if(id = chipIDs[0]){
+                if(id == chipIDs[0]){
                     sendSlackMessage(message, heleenSlackURL);
-                }else if(id = chipIDs[1]){
+                }else if(id == chipIDs[1]){
                     sendSlackMessage(message, jesperSlackURL);
                 }else if(id = chipIDs[2]){
                     sendSlackMessage(message, joshSlackURL);
@@ -108,6 +108,8 @@ function startSensorValueCheck() {
     }, 2000);
 }
 
+startSensorValueCheck();
+
 function sendSlackMessage(message, url) {
     request({
         url: url,
@@ -131,12 +133,15 @@ app.get('/', function (req, res) {
 app.get('/pushdata/:distance/:chipId', function (req, res){
   var distance = req.params.distance;
   var chipId = req.params.chipId;
+  
+  res.send('Hello');
   fs.readFile('./sensordata.json', function (err, data) {
       if(err) {
         console.log(err);
       }
 
       var json = JSON.parse(data)
+      
       json.push({distance: distance, chipId : chipId })
 
       fs.writeFile("./sensordata.json", JSON.stringify(json))
