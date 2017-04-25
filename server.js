@@ -11,14 +11,14 @@ var jesperSlackURL = 'https://hooks.slack.com/services/T4ZCSTHTQ/B52M4LZD4/BNGae
 var generalSlackURL = 'https://hooks.slack.com/services/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';
 var newsSlackURL = 'https://hooks.slack.com/services/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';
 var triviaSlackURL = 'https://hooks.slack.com/services/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';
-var newsApiKey = '9e5dce43547a4fe0a8b0b875111ff3c2'; 
+var newsApiKey = '9e5dce43547a4fe0a8b0b875111ff3c2';
 var chipIDs = ['AF3E', '8d4b', 'FF28'];
 
 function setLEDColor(importance) {
     request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sdc&d=' + chipIDs[0] + '&td=' + chipIDs[0] + '&c=' + importance, function () {
         request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=' + chipIDs[0]);
     });
-    
+
     request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sdc&d=' + chipIDs[1] + '&td=' + chipIDs[1] + '&c=' + importance, function () {
         request('https://oege.ie.hva.nl/~palr001/icu/api.php?t=sqi&d=' + chipIDs[1]);
     });
@@ -35,7 +35,7 @@ function getNewsArticles(source, sort, amount, id) {
         if (articles != undefined) {
             for (var i = 0; i < amount; i++) {
                 var message = articles[i].title + ' ' + articles[i].url;
-                
+
                 if(id = chipIDs[0]){
                     sendSlackMessage(message, heleenSlackURL);
                 }else if(id = chipIDs[1]){
@@ -43,12 +43,12 @@ function getNewsArticles(source, sort, amount, id) {
                 }else if(id = chipIDs[2]){
                     sendSlackMessage(message, joshSlackURL);
                 }
-                
+
             }
         }
     });
 }
-   
+
 //google-news - top
 //bbc-news  - top
 //the-next-web - latest
@@ -71,11 +71,11 @@ function getSensorValues() {
                 value: parsedData.feeds[0].field1,
                 id: parsedData.feeds[0].field2
             }
-            
+
             sensorValue = data;
         }
     });
-   
+
 }
 
 
@@ -128,11 +128,25 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/form.html'));
 })
 
+app.get('/pushdata/:distance/:chipId', function (req, res){
+  var distance = req.params.distance;
+  var chipId = req.params.chipId;
+  fs.readFile('./sensordata.json', function (err, data) {
+      if(err) {
+        console.log(err);
+      }
+
+      var json = JSON.parse(data)
+      json.push({distance: distance, chipId : chipId })
+
+      fs.writeFile("./sensordata.json", JSON.stringify(json))
+  })
+})
 
 app.get('/message', function (req, res) {
     var message = req.query.text;
     var importance = req.query.importance;
-    
+
     sendSlackMessage(message, generalSlackURL);
     setLEDColor(importance);
 });
@@ -144,27 +158,27 @@ app.listen(3000, function () {
 
 
 
-//    
+//
 //function getTriviaQuestion(difficulty){
-//    
+//
 //    request('https://opentdb.com/api.php?amount=1&difficulty=' + difficulty, function (error, response, data) {
-//        
+//
 //        var parsedData = JSON.parse(data);
 //        var question = parsedData.results[0].question;
 //        var answer = parsedData.results[0].correct_answer;
 //        setLEDColor('FF0000');
 //        sendSlackMessage(question, triviaSlackURL);
-//        
+//
 //        clearInterval(checkSensorValue);
-//        
+//
 //        setTimeout(function(){
 //            startSensorValueCheck();
 //            sendSlackMessage(answer, triviaSlackURL);
 //        }, 15000);
 //    });
-//} 
-//    
-//getTriviaQuestion('easy'); 
+//}
+//
+//getTriviaQuestion('easy');
 
 
 //          STUFF FOR TRIVIA
