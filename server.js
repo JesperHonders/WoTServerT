@@ -3,7 +3,11 @@ var app = express()
 var request = require('request')
 var path = require('path');
 
+//PERSONAL SLACK URLS
 var heleenSlackURL = 'https://hooks.slack.com/services/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';
+var joshSlackURL = 'https://hooks.slack.com/services/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';
+var jesperSlackURL = 'https://hooks.slack.com/services/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';
+
 var generalSlackURL = 'https://hooks.slack.com/services/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';
 var newsSlackURL = 'https://hooks.slack.com/services/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';
 var triviaSlackURL = 'https://hooks.slack.com/services/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';
@@ -24,39 +28,27 @@ function setLEDColor(importance) {
     });
 }
 
-function getNewsArticles(source, sort, amount) {
+function getNewsArticles(source, sort, amount, id) {
     request(' https://newsapi.org/v1/articles?source=' + source + '&sortBy='+ sort +'&apiKey=' + newsApiKey, function (error, response, data) {
         var parsedData = JSON.parse(data);
         var articles = parsedData.articles;
         if (articles != undefined) {
             for (var i = 0; i < amount; i++) {
                 var message = articles[i].title + ' ' + articles[i].url;
-                sendSlackMessage(message, newsSlackURL);
+                
+                if(id = chipIDs[0]){
+                    sendSlackMessage(message, heleenSlackURL);
+                }else if(id = chipIDs[1]){
+                    sendSlackMessage(message, jesperSlackURL);
+                }else if(id = chipIDs[2]){
+                    sendSlackMessage(message, joshSlackURL);
+                }
+                
             }
         }
     });
 }
-//    
-//function getTriviaQuestion(difficulty){
-//    
-//    request('https://opentdb.com/api.php?amount=1&difficulty=' + difficulty, function (error, response, data) {
-//        
-//        var parsedData = JSON.parse(data);
-//        var question = parsedData.results[0].question;
-//        var answer = parsedData.results[0].correct_answer;
-//        setLEDColor('FF0000');
-//        sendSlackMessage(question, triviaSlackURL);
-//        
-//        clearInterval(checkSensorValue);
-//        
-//        setTimeout(function(){
-//            startSensorValueCheck();
-//            sendSlackMessage(answer, triviaSlackURL);
-//        }, 15000);
-//    });
-//} 
-//    
-//getTriviaQuestion('easy');    
+   
 //google-news - top
 //bbc-news  - top
 //the-next-web - latest
@@ -77,7 +69,7 @@ function getSensorValues() {
 
             var data = {
                 value: parsedData.feeds[0].field1,
-                created_at: parsedData.feeds[0].created_at
+                id: parsedData.feeds[0].field2
             }
             
             sensorValue = data;
@@ -101,30 +93,17 @@ function startSensorValueCheck() {
                 lastSensorValue = data.value;
                 console.log('IT CHANGED');
                 if (data.value > 0 && data.value < 21) {
-                    getNewsArticles('the-next-web', 'latest', 1);
+                    getNewsArticles('the-next-web', 'latest', 1, data.id);
                 } else if (data.value > 20 && data.value < 41) {
-                    getNewsArticles('the-next-web', 'latest', 2);
+                    getNewsArticles('the-next-web', 'latest', 2, data.id);
                 } else if (data.value > 40 && data.value < 61) {
-                    getNewsArticles('the-next-web', 'latest', 3);
+                    getNewsArticles('the-next-web', 'latest', 3, data.id);
                 } else if (data.value > 60 && data.value < 81) {
-                    getNewsArticles('the-next-web', 'latest', 4);
+                    getNewsArticles('the-next-web', 'latest', 4, data.id);
                 } else if (data.value > 80 && data.value < 101) {
-                    getNewsArticles('the-next-web', 'latest', 5);
+                    getNewsArticles('the-next-web', 'latest', 5, data.id);
                 }
             }
-//          STUFF FOR TRIVIA
-//            if (lastSensorValue != data.value) {
-//                lastSensorValue = data.value;
-//                console.log('IT CHANGED');
-//                if (data.value > 0 && data.value < 11) {
-//                    getTriviaQuestion('easy');
-//                } else if (data.value > 10 && data.value < 21) {
-//                    getTriviaQuestion('medium');
-//                } else if (data.value > 20 && data.value < 30) {
-//                    getTriviaQuestion('hard');
-//                }
-//            }
-
         }
     }, 2000);
 }
@@ -165,3 +144,38 @@ app.listen(3000, function () {
 
 
 
+//    
+//function getTriviaQuestion(difficulty){
+//    
+//    request('https://opentdb.com/api.php?amount=1&difficulty=' + difficulty, function (error, response, data) {
+//        
+//        var parsedData = JSON.parse(data);
+//        var question = parsedData.results[0].question;
+//        var answer = parsedData.results[0].correct_answer;
+//        setLEDColor('FF0000');
+//        sendSlackMessage(question, triviaSlackURL);
+//        
+//        clearInterval(checkSensorValue);
+//        
+//        setTimeout(function(){
+//            startSensorValueCheck();
+//            sendSlackMessage(answer, triviaSlackURL);
+//        }, 15000);
+//    });
+//} 
+//    
+//getTriviaQuestion('easy'); 
+
+
+//          STUFF FOR TRIVIA
+//            if (lastSensorValue != data.value) {
+//                lastSensorValue = data.value;
+//                console.log('IT CHANGED');
+//                if (data.value > 0 && data.value < 11) {
+//                    getTriviaQuestion('easy');
+//                } else if (data.value > 10 && data.value < 21) {
+//                    getTriviaQuestion('medium');
+//                } else if (data.value > 20 && data.value < 30) {
+//                    getTriviaQuestion('hard');
+//                }
+//            }
