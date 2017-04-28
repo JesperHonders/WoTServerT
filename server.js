@@ -73,17 +73,17 @@ app.get('/', function (req, res) {
 app.get('/pushdata/:distance/:chipId', function (req, res){
   var distance = req.params.distance;
   var chipId = req.params.chipId;
-  res.send('Hello');
+  res.send('pushed distance: '+distance+" and chipId: "+chipId);
   fs.readFile('./sensordata.json', function (err, data) {
       if(err) {
         console.log(err);
+      } else {
+        var dataToSend = JSON.parse(data)
+
+        dataToSend.push({distance: distance, chipId : chipId, time: new Date().getTime()})
+        checkArticle(dataToSend);
+        fs.writeFile("./sensordata.json", JSON.stringify(dataToSend))
       }
-
-      var dataToSend = JSON.parse(data)
-
-      dataToSend.push({distance: distance, chipId : chipId, time: new Date().getTime()})
-      checkArticle(dataToSend);
-      fs.writeFile("./sensordata.json", JSON.stringify(dataToSend))
   })
 
 
@@ -97,7 +97,30 @@ app.get('/message', function (req, res) {
     setLEDColor(importance);
 });
 
-app.listen(80, function () {
+app.get('/showJson' , function (req,res){
+    fs.readFile('./sensordata.json', function (err, data) {
+      if(err){
+        console.log(err)
+      }
+
+      var json = JSON.parse(data)
+      res.send(json)
+    })
+})
+
+app.get('/clearJson' , function (req,res){
+    fs.readFile('./sensordata.json', function (err, data) {
+      if(err){
+        console.log(err)
+      }
+
+      var json = []
+      fs.writeFile("./sensordata.json", JSON.stringify(json))
+      res.send("Cleared sensordata.json")
+    })
+})
+
+app.listen(3000, function () {
     console.log('Example app listening on port 3000!')
 })
 
@@ -105,7 +128,7 @@ function checkArticle(data) {
   console.log(data, typeof data, data.length);
 
   var jsonLength = data.length;
-  var minDifference = data[jsonLength - 2].time + 5000;
+  var minDifference = (data.hasOwnProperty("time")) ? data[jsonLength - 2].time + 5000 : 0;
   var lastValue = data[jsonLength - 1].distance;
   var lastChipID = data[jsonLength - 1].chipId;
   // console.log(json.length);

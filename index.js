@@ -167,6 +167,17 @@ app.get('/pushdata/:distance/:chipId', function (req, res){
   })
 })
 
+app.get('/showJson' , function (req,res){
+    fs.readFile('./sensordata.json', function (err, data) {
+      if(err){
+        console.log(err)
+      }
+
+      var json = JSON.parse(data)
+      res.send(json)
+    })
+})
+
 
 app.get('/message', function (req, res) {
     var message = req.query.text;
@@ -176,6 +187,6 @@ app.get('/message', function (req, res) {
     setLEDColor(importance);
 });
 
-app.listen(3000, '0.0.0.0' ,function () {
+app.listen(3000,function () {
     console.log('Example app listening on port 3000!')
 })
