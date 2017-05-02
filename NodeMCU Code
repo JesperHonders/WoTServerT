@@ -169,7 +169,7 @@ void readDistance() {
   duration = pulseIn(ECHO, HIGH);
   distance = (duration/2) / 29.1;
 
-  if (distance < 100) {
+  if (distance < 40) {
     writeThingSpeak(distance);
     playSong();
   }

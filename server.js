@@ -133,16 +133,15 @@ function checkArticle(data) {
   var lastChipID = data[jsonLength - 1].chipId;
   // console.log(json.length);
   if (data[jsonLength - 1].time > minDifference){
-          if (lastValue > 0 && lastValue < 21) {
+          if (lastValue > 0 && lastValue < 17) {
               getNewsArticles('the-next-web', 'latest', 1, lastChipID);
-          } else if (lastValue > 20 && lastValue < 41) {
+              setLEDColor('000080');
+          } else if (lastValue > 17 && lastValue < 27) {
               getNewsArticles('the-next-web', 'latest', 2, lastChipID);
-          } else if (lastValue > 40 && lastValue < 61) {
+              setLEDColor('000080');
+          } else if (lastValue > 27 && lastValue < 40) {
               getNewsArticles('the-next-web', 'latest', 3, lastChipID);
-          } else if (lastValue > 60 && lastValue < 81) {
-              getNewsArticles('the-next-web', 'latest', 4, lastChipID);
-          } else if (lastValue > 80 && lastValue < 101) {
-              getNewsArticles('the-next-web', 'latest', 5, lastChipID);
+              setLEDColor('000080');
           }
   }
 }
