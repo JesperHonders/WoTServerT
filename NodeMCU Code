@@ -11,8 +11,8 @@
 
 int speakerPin = D0;
 int length = 15; // the number of notes
-char notes[] = "ccggaagffeeddc "; // a space represents a rest
-int beats[] = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 4 };
+char notes[] = "c"; // a space represents a rest
+int beats[] = { 4 };
 int tempo = 300;
 String thingspeak_distance = "distance";
 int time_between_sensor_readings = 60000;
@@ -99,27 +99,17 @@ void playNote(char note, int duration) {
 }
 
 void writeThingSpeak(int distance) {
-  String apiKey = "6JA2Z3SRXG1R795Q";
-  if (client.connect("api.thingspeak.com", 80)) { // "184.106.153.149" or api.thingspeak.com
-    String postStr = "6JA2Z3SRXG1R795Q";
-    postStr += "&field1=";                   // Post de analogeWaarde naar field 1 van je ThingSpeak channel
-    postStr += String(distance);
-    postStr += "&field2=";
-    postStr += String(chipID);
-
-    postStr += "\r\n\r\n";
-
-    client.print("POST /update HTTP/1.1\n");
-    client.print("Host: api.thingspeak.com\n");
-    client.print("Connection: close\n");
-    client.print("X-THINGSPEAKAPIKEY: " + apiKey + "\n");
-    client.print("Content-Type: application/x-www-form-urlencoded\n");
-    client.print("Content-Length: ");
-    client.print(postStr.length());
-    client.print("\n\n");
-    client.print(postStr);
-  };
-  client.stop();
+  Serial.println(distance);
+  Serial.println("running client connect");
+  HTTPClient http;
+  String reqString = "http://188.226.148.132/pushdata/";
+  reqString += String(distance);
+  reqString += "/";
+  reqString += String(chipID);
+  // Serial.println(reqString);
+  http.begin(reqString);
+  int status = http.GET();
+  Serial.println(status);
 }
 
 
@@ -179,8 +169,6 @@ void readDistance() {
   duration = pulseIn(ECHO, HIGH);
   distance = (duration/2) / 29.1;
 
-  Serial.print(distance);
-  Serial.println("Centimeter:");
   if (distance < 100) {
     writeThingSpeak(distance);
     playSong();
