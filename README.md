@@ -1,7 +1,6 @@
 ##Doelgroep
 
-Nerds op het werk. Developers gebruiken vaak slack, daarom gaan we hier iets mee doen! 
-Wat doen nerds op het werk? Programmeren natuurlijk. Daarnaast lezen de meeste nerds echter veel artikelen en vergaderen ze ook zo nu en doen.
+Developers en designers in de webdevelopment branche. 
 
 ##Concept
 
@@ -10,65 +9,33 @@ Aan dit bericht geef je een kleur mee de kleur staat voor de belangrijksgraat va
 
 Naast vergaderen lezen developers veel artikelen. Wij hebben bedacht dat door middel van een nerdbril pakken er een bepaalde hoeveelheid artikelen naar je slack channel gestuurd worden. Wil je dus veel leesmateriaal? Dan moet je de grootste nerdbril pakken en worden er 3 artikelen voor jou om te lezen naar je slack toegestuurd.
 
-De interface
-![alt tag](screenshots/interface.png) 
-
-##De werking
-![alt tag](screenshots/flowchart.jpg) 
-
-##File structuur
-
-|--Server IOT
-|	|--node_moduls
-|   |--public
-|   	|--js
-|			|--app.js
-|			|--handler.js
-|		|--style
-|			|--style.js
-|			|--script.js
-|		|--form.html  
-|   |--screenshots
-|   |--server.js
-|   |--package.json
-|   |--README.md
-```
-
-In handler.js word een http request aangemaakt die de url message (bericht) en de importance (kleur lampjes) meestuurd naar de backend (/message). 
-Vervolgens word in index.js een de request naar /message afgehandelt en worden het bericht en importance als variable opgeslagen en uitgestuurd naar de server van slack en de server van de arduino in beide weer een HTTP request. 
-
-
-
-##Doelgroep
-
-Developers en designers in de webdevelopment branche. 
-
-##Concept
-
-Developers en designers maken tegenwoordig veel gebruik van Slack. 
-Slack is het communicatie platform voor developers/designers. 
-
 ###Het doosje
 We hebben een doosje gekregen en hieraan hebben wij led lampjes een bewegingssensor en een geluidssensor aan gehangen. 
 
 In de foto hieronder kun je zien dat zodra het lampje gaat branden er verschillende boodschappen zijn per kleur: Zie afbeelding hieronder:
 
-FOTO DOOSJE
+Het doosje
+![alt tag](screenshots/doosje.jpg) 
 
 ###De interface
 Via de interface kan de gebruiker een bericht plaatsen voor het hele kantoor. 
 Aan dit bericht geef je een kleur mee de kleur staat voor de belangrijksgraat van het bericht (zie afbeelding doosje). Deze kleur gaan vervolgens af bij alle doosjes. Iedereen weet dan of hij het bericht meteen moet lezen of niet. Daarnaast krijg je het daadwerkelijke bericht door via slack. 
 Op deze manier kan bijv. aangegeven worden dat er nu een vergadering is en dat ze daar nu heen moeten.
 
+De interface
+![alt tag](screenshots/interface.png) 
+
 ###Vrije tijd
 Als de gebruikers vrije tijd hebben of een pauze inlassen, gaan veel developers en designers artikelen lezen over hun vakgebied. Dit process wilde wij optimaliseren. Vaak is het een gedoe en weet je niet op welke site je moet beginnen met kijken. Hierdoor hebben wij bedacht dat je alleen maar hoeft aan te geven hoeveel je wil nerden. Dit geef je aan door een bril van het rek te pakken. Hoe hoger het level hoe mee artikelen naar je toe worden gestuurd in slack. Zodra je een bril hebt gepakt hoor een een Bliebje als feedback dat het is geregisreerd en de artikelen onderweg zijn. 
 
-FOTO REK
+Nerd-up
+![alt tag](screenshots/Nerd-up.jpg) 
+
 
 ##De werking 
 
-AFBEELDING FLOW 
-
+Flow
+![alt tag](screenshots/flowchart3.jpg) 
 
 
 ####handler.js
@@ -105,25 +72,24 @@ var handler = {
 Vervolgens word in server.js een request naar /message afgehandelt en worden het bericht en importance als variable opgeslagen en uitgestuurd naar de server van slack en de server van de arduino in beide weer een HTTP request. 
 
 ```
-De front end stuurt een bericht naar de path "/message" waar de server naar luistert. De path /message leest vervolgens de query parameters uit die meegestuurd worden, dit zijn de message en de kleur die gevuld worden in het formfield van de frontend. Vervolgens worden de functies sendSlackMessage() en setLEDColor() uitgevoerd met deze data.
-
-```
 app.get('/message', function (req, res) {
     var message = req.query.text;
     var importance = req.query.importance;
-
-    sendSlackMessage(message, generalSlackURL);
+    var newsMedium = req.query.medium;
+    
+    if(newsMedium == 'no-medium'){
+        sendSlackMessage(message, generalSlackURL);
+    }else{
+        getNewsArticles(newsMedium, 'top');
+    }
     setLEDColor(importance);
 });
-
-```
 
 ```
 
 Er staan 2 functies in sendmessage 1 om de message naar slack te sturen en een functie om de kleuren van de arduino te zetten. 
 
 ```
-
 var generalSlackURL = 'https://hooks.slack.com/services/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';
 
 function sendSlackMessage(message, url) {
@@ -148,7 +114,6 @@ app.get('/', function (req, res) {
 
 ```
 
-
 Er word een array aangemaakt met de chipIDs[0].
 Daarna stuur je een request uit met de kleur van het lampje die je hebt ingevuld.
 (Hij zet de kleur op het kastje en daarn op zichzelf).
@@ -171,30 +136,3 @@ function setLEDColor(importance) {
     });
 }
 ```
-
-```
-De functie checkArticle() leest de data uit die gestuurd wordt vanaf de arduino. Hierin wordt gekeken naar de JSON file waarin dit geschreven wordt. Eerst worden alle variabele netjes gevuld met de json data. Vervolgens kijken we of er minimaal 5 seconde zijn geweest tussen de 2 variabelen. Is dit het geval dan halen we een aantal nieuwsberichten op op basis van de distance uit de sensor.
-
-```
-function checkArticle(data) {
-  console.log(data, typeof data, data.length);
-
-  var jsonLength = data.length;
-  var minDifference = (data.hasOwnProperty("time")) ? data[jsonLength - 2].time + 5000 : 0;
-  var lastValue = data[jsonLength - 1].distance;
-  var lastChipID = data[jsonLength - 1].chipId;
-  // console.log(json.length);
-  if (data[jsonLength - 1].time > minDifference){
-          if (lastValue > 0 && lastValue < 17) {
-              getNewsArticles('the-next-web', 'latest', 1, lastChipID);
-              setLEDColor('000080');
-          } else if (lastValue > 17 && lastValue < 27) {
-              getNewsArticles('the-next-web', 'latest', 2, lastChipID);
-              setLEDColor('000080');
-          } else if (lastValue > 27 && lastValue < 40) {
-              getNewsArticles('the-next-web', 'latest', 3, lastChipID);
-              setLEDColor('000080');
-          }
-  }
-}
-
