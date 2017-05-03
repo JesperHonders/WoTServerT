@@ -1,15 +1,15 @@
-##Doelgroep
+## Doelgroep
 
 Developers en designers in de webdevelopment branche. 
 
-##Concept
+## Concept
 
 Via de interface kan de gebruiker een bericht plaatsen voor het hele kantoor. 
 Aan dit bericht geef je een kleur mee de kleur staat voor de belangrijksgraat van het bericht. Dus als hij rood is word er verwacht dat je hem meteen leest, orangje nog wel vandaag en groen ter informatie. Deze kleur gaat af doordat je het doosje met lampjes op je bureau hebt staan en de message komt binnen via slack. Op deze manier kunnen developers door middel van het lichtje even uit hun code gehaald worden en naar bijv. de vergaderruimte gestuurd worden voor een vergadering!
 
 Naast vergaderen lezen developers veel artikelen. Wij hebben bedacht dat door middel van een nerdbril pakken er een bepaalde hoeveelheid artikelen naar je slack channel gestuurd worden. Wil je dus veel leesmateriaal? Dan moet je de grootste nerdbril pakken en worden er 3 artikelen voor jou om te lezen naar je slack toegestuurd.
 
-###Het doosje
+### Het doosje
 We hebben een doosje gekregen en hieraan hebben wij led lampjes een bewegingssensor en een geluidssensor aan gehangen. 
 
 In de foto hieronder kun je zien dat zodra het lampje gaat branden er verschillende boodschappen zijn per kleur: Zie afbeelding hieronder:
@@ -17,7 +17,7 @@ In de foto hieronder kun je zien dat zodra het lampje gaat branden er verschille
 Het doosje
 ![alt tag](screenshots/doosje.JPG) 
 
-###De interface
+### De interface
 Via de interface kan de gebruiker een bericht plaatsen voor het hele kantoor. 
 Aan dit bericht geef je een kleur mee de kleur staat voor de belangrijksgraat van het bericht (zie afbeelding doosje). Deze kleur gaan vervolgens af bij alle doosjes. Iedereen weet dan of hij het bericht meteen moet lezen of niet. Daarnaast krijg je het daadwerkelijke bericht door via slack. 
 Op deze manier kan bijv. aangegeven worden dat er nu een vergadering is en dat ze daar nu heen moeten.
@@ -25,7 +25,7 @@ Op deze manier kan bijv. aangegeven worden dat er nu een vergadering is en dat z
 De interface
 ![alt tag](screenshots/interface.png) 
 
-###Vrije tijd
+### Vrije tijd
 Als de gebruikers vrije tijd hebben of een pauze inlassen, gaan veel developers en designers artikelen lezen over hun vakgebied. Dit process wilde wij optimaliseren. Vaak is het een gedoe en weet je niet op welke site je moet beginnen met kijken. Hierdoor hebben wij bedacht dat je alleen maar hoeft aan te geven hoeveel je wil nerden. Dit geef je aan door een bril van het rek te pakken. Hoe hoger het level hoe mee artikelen naar je toe worden gestuurd in slack. Zodra je een bril hebt gepakt hoor een een Bliebje als feedback dat het is geregisreerd en de artikelen onderweg zijn. 
 
 Nerd-up
@@ -40,7 +40,7 @@ Flow
 ## Werking Berichten
 
 
-####handler.js
+#### handler.js
 In handler.js word een http request aangemaakt die de url message (bericht) en de importance (kleur lampjes) meestuurd naar de backend (/message). 
 
 ``` javascript
@@ -70,7 +70,7 @@ var handler = {
     },
 }
 ```
-###Server.js
+### Server.js
 Vervolgens word in server.js een request naar /message afgehandelt en worden het bericht en importance als variable opgeslagen en uitgestuurd naar de server van slack en de server van de arduino in beide weer een HTTP request. 
 
 ``` javascript
@@ -139,7 +139,7 @@ function setLEDColor(importance) {
 }
 ```
 
-#NerdUp Werking
+# NerdUp Werking
 
 Doormiddel van de nodeMCU in combinatie met een afstandsensor kunnen wij uitlezen welke bril er wordt gepakt bij NerdUp.
 Zodra de nodeMCu detecteerd dat er een bril is gepakt, stuurt de nodeMCU een HTTP request naar onze eigen server. Op de server wordt er uitgelezen welke bril is er gepakt.
