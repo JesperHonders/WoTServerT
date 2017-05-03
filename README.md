@@ -108,10 +108,10 @@ function sendSlackMessage(message, url) {
         }
     });
 }
-app.use(express.static(__dirname + '/public')); // hier geeft hij een folder aan 
+app.use(express.static(__dirname + '/public')); 
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/public/form.html')); // open deze pagina
+    res.sendFile(path.join(__dirname + '/public/form.html'));
 })
 
 ```
