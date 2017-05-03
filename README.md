@@ -172,7 +172,7 @@ function setLEDColor(importance) {
 }
 ```
 
-
+```
 De functie checkArticle() leest de data uit die gestuurd wordt vanaf de arduino. Hierin wordt gekeken naar de JSON file waarin dit geschreven wordt. Eerst worden alle variabele netjes gevuld met de json data. Vervolgens kijken we of er minimaal 5 seconde zijn geweest tussen de 2 variabelen. Is dit het geval dan halen we een aantal nieuwsberichten op op basis van de distance uit de sensor.
 
 ```
@@ -197,4 +197,4 @@ function checkArticle(data) {
           }
   }
 }
-```
+
