@@ -105,18 +105,18 @@ var handler = {
 Vervolgens word in server.js een request naar /message afgehandelt en worden het bericht en importance als variable opgeslagen en uitgestuurd naar de server van slack en de server van de arduino in beide weer een HTTP request. 
 
 ```
+De front end stuurt een bericht naar de path "/message" waar de server naar luistert. De path /message leest vervolgens de query parameters uit die meegestuurd worden, dit zijn de message en de kleur die gevuld worden in het formfield van de frontend. Vervolgens worden de functies sendSlackMessage() en setLEDColor() uitgevoerd met deze data.
+
+```
 app.get('/message', function (req, res) {
     var message = req.query.text;
     var importance = req.query.importance;
-    var newsMedium = req.query.medium;
-    
-    if(newsMedium == 'no-medium'){
-        sendSlackMessage(message, generalSlackURL);
-    }else{
-        getNewsArticles(newsMedium, 'top');
-    }
+
+    sendSlackMessage(message, generalSlackURL);
     setLEDColor(importance);
 });
+
+```
 
 ```
 
@@ -171,3 +171,6 @@ function setLEDColor(importance) {
     });
 }
 ```
+
+
+
