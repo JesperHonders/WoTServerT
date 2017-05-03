@@ -98,7 +98,7 @@ function sendSlackMessage(message, url) {
     request({
         url: url,
         form: '{"text": "' + message + '"}',
-        method: 'POST', // een post want je gaat iets poste op de slack server?
+        method: 'POST', 
         type: 'application/json',
     }, function (error, response, data) {
         if (error) {
