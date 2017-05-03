@@ -41,7 +41,7 @@ function getNewsArticles(source, sort, amount, id) {
                     sendSlackMessage(message, heleenSlackURL);
                 }else if(id == chipIDs[1]){
                     sendSlackMessage(message, jesperSlackURL);
-                }else if(id = chipIDs[2]){
+                }else if(id == chipIDs[2]){
                     sendSlackMessage(message, joshSlackURL);
                 }
 
