@@ -173,4 +173,28 @@ function setLEDColor(importance) {
 ```
 
 
+De functie checkArticle() leest de data uit die gestuurd wordt vanaf de arduino. Hierin wordt gekeken naar de JSON file waarin dit geschreven wordt. Eerst worden alle variabele netjes gevuld met de json data. Vervolgens kijken we of er minimaal 5 seconde zijn geweest tussen de 2 variabelen. Is dit het geval dan halen we een aantal nieuwsberichten op op basis van de distance uit de sensor.
 
+```
+function checkArticle(data) {
+  console.log(data, typeof data, data.length);
+
+  var jsonLength = data.length;
+  var minDifference = (data.hasOwnProperty("time")) ? data[jsonLength - 2].time + 5000 : 0;
+  var lastValue = data[jsonLength - 1].distance;
+  var lastChipID = data[jsonLength - 1].chipId;
+  // console.log(json.length);
+  if (data[jsonLength - 1].time > minDifference){
+          if (lastValue > 0 && lastValue < 17) {
+              getNewsArticles('the-next-web', 'latest', 1, lastChipID);
+              setLEDColor('000080');
+          } else if (lastValue > 17 && lastValue < 27) {
+              getNewsArticles('the-next-web', 'latest', 2, lastChipID);
+              setLEDColor('000080');
+          } else if (lastValue > 27 && lastValue < 40) {
+              getNewsArticles('the-next-web', 'latest', 3, lastChipID);
+              setLEDColor('000080');
+          }
+  }
+}
+```
