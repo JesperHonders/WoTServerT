@@ -1,4 +1,4 @@
-##NerdUp
+## NerdUp
 
 Jesper Honders, Heleen Snoeck en Joshua Onwezen
 
