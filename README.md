@@ -15,7 +15,7 @@ We hebben een doosje gekregen en hieraan hebben wij led lampjes een bewegingssen
 In de foto hieronder kun je zien dat zodra het lampje gaat branden er verschillende boodschappen zijn per kleur: Zie afbeelding hieronder:
 
 Het doosje
-![alt tag](screenshots/doosje.jpg) 
+![alt tag](screenshots/doosje.JPG) 
 
 ###De interface
 Via de interface kan de gebruiker een bericht plaatsen voor het hele kantoor. 
@@ -29,7 +29,7 @@ De interface
 Als de gebruikers vrije tijd hebben of een pauze inlassen, gaan veel developers en designers artikelen lezen over hun vakgebied. Dit process wilde wij optimaliseren. Vaak is het een gedoe en weet je niet op welke site je moet beginnen met kijken. Hierdoor hebben wij bedacht dat je alleen maar hoeft aan te geven hoeveel je wil nerden. Dit geef je aan door een bril van het rek te pakken. Hoe hoger het level hoe mee artikelen naar je toe worden gestuurd in slack. Zodra je een bril hebt gepakt hoor een een Bliebje als feedback dat het is geregisreerd en de artikelen onderweg zijn. 
 
 Nerd-up
-![alt tag](screenshots/Nerd-up.jpg) 
+![alt tag](screenshots/Nerd-up.JPG) 
 
 
 ##De werking 
