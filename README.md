@@ -1,3 +1,7 @@
+##NerdUp
+
+Jesper Honders, Heleen Snoeck en Joshua Onwezen
+
 ## Doelgroep
 
 Developers en designers in de webdevelopment branche. 
@@ -296,5 +300,13 @@ function sendSlackMessage(message, url) {
 }
 
 ```
+
+De slack berichten worden naar een specifiek channel gestuurd. Dit staat hardcoded in de code aangezien er een webhook aangemaakt moest worden via de slack API. Op basis van de chipID wordt er naar het juiste channel gepost.
+
+```
+var jesperSlackURL = 'https://hooks.slack.com/services/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';
+
+```
+
 
 er wordt hier een post call gestuurd naar in dit geval de slack api. met daarin de article title en url van de vorige functie. En zo is het NerdUp proces compleet
