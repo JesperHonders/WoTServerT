@@ -43,7 +43,7 @@ Flow
 ####handler.js
 In handler.js word een http request aangemaakt die de url message (bericht) en de importance (kleur lampjes) meestuurd naar de backend (/message). 
 
-```
+``` javascript
 var handler = {
     submitMessage: function(){
         var form = document.querySelector('form');
@@ -73,7 +73,7 @@ var handler = {
 ###Server.js
 Vervolgens word in server.js een request naar /message afgehandelt en worden het bericht en importance als variable opgeslagen en uitgestuurd naar de server van slack en de server van de arduino in beide weer een HTTP request. 
 
-```
+``` javascript
 app.get('/message', function (req, res) {
     var message = req.query.text;
     var importance = req.query.importance;
@@ -91,7 +91,7 @@ app.get('/message', function (req, res) {
 
 Er staan 2 functies in sendmessage 1 om de message naar slack te sturen en een functie om de kleuren van de arduino te zetten. 
 
-```
+``` javascript
 var generalSlackURL = 'https://hooks.slack.com/services/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';
 
 function sendSlackMessage(message, url) {
@@ -121,7 +121,7 @@ Daarna stuur je een request uit met de kleur van het lampje die je hebt ingevuld
 (Hij zet de kleur op het kastje en daarn op zichzelf).
 
 
-```
+``` javascript
 var chipIDs = ['AF3E', '8d4b', 'FF28'];
 
 function setLEDColor(importance) {
@@ -146,7 +146,7 @@ Zodra de nodeMCu detecteerd dat er een bril is gepakt, stuurt de nodeMCU een HTT
 
 In de nodeMCU gebruiken we de volgende code om de afstand uit te lezen:
 
-```
+``` C++
 
 void readDistance() {
   long duration, distance;
@@ -177,7 +177,7 @@ Voor deze applicatie gebruiken we onze eigen node server. We zijn begonnen met e
 
 als writeThingSpeak() wordt aangeroepen, wordt de volgende code uitgevoerd:
 
-```
+``` C++
 void writeThingSpeak(int distance) {
   Serial.println(distance);
   Serial.println("running client connect");
@@ -196,7 +196,7 @@ void writeThingSpeak(int distance) {
 Hier wordt een http request gedaan naar onze eigen server naar de route pushdata/"Afstand"/"sensorID".
 Deze request wordt in de server.js opgevangen als volgt:
 
-```
+``` javascript
 app.get('/pushdata/:distance/:chipId', function (req, res){
   var distance = req.params.distance;
   var chipId = req.params.chipId;
@@ -222,7 +222,7 @@ De distance en chipId worden uit de url gelezen. de sensordata.json wordt geopen
 
 Hier lees je ook dat de checkArticle() wordt aangeroepen. Dat is de volgende stap in het proces. In deze functie lezen we de laatste 2 objecten (afstanden en id's) van de json uit, testen we of er niet gespammed wordt, en checken we wat voor artikelen we gaan sturen:
 
-```
+``` javascript
 
 function checkArticle(data) {
   console.log(data, typeof data, data.length);
@@ -251,7 +251,7 @@ function checkArticle(data) {
 
 Er worden hier weer 2 functies aangeroepen om het proces af te maken: getNewsArticles() en setLEDColor(). SetLEDColor gebruiken we om nog een extra feedback te geven dat de artikelen zijn gestuurd door de ledjes op het doosje te laten branden. En in getNewsArticles doen we 2 api calls naar zowel de newsApi als naar slack:
 
-```
+``` javascript
 
 function getNewsArticles(source, sort, amount, id) {
     request(' https://newsapi.org/v1/articles?source=' + source + '&sortBy='+ sort +'&apiKey=' + newsApiKey, function (error, response, data) {
@@ -278,7 +278,7 @@ function getNewsArticles(source, sort, amount, id) {
 
 Er wordt hierboven in de code een call gedaan naar newsapi.org daaruit wordt een object opgehaald, daarvan worden de articles names en url's uit gheaald. en deze worden doorgestuurd naar sendSlackMessage() die er als volgt uitziet:  
 
-```
+``` javascript
 
 function sendSlackMessage(message, url) {
     request({
