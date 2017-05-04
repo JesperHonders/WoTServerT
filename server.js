@@ -135,13 +135,13 @@ function checkArticle(data) {
   if (data[jsonLength - 1].time > minDifference){
           if (lastValue > 0 && lastValue < 17) {
               getNewsArticles('the-next-web', 'latest', 1, lastChipID);
-              setLEDColor('000080');
+              // setLEDColor('000080');
           } else if (lastValue > 17 && lastValue < 27) {
               getNewsArticles('the-next-web', 'latest', 2, lastChipID);
-              setLEDColor('000080');
+              // setLEDColor('000080');
           } else if (lastValue > 27 && lastValue < 40) {
               getNewsArticles('the-next-web', 'latest', 3, lastChipID);
-              setLEDColor('000080');
+              // setLEDColor('000080');
           }
   }
 }
